@@ -18,8 +18,8 @@ public class judgeController {
 	public String getConfiguration() throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://13.233.54.34:2358/config_info"))
 				.method("GET", HttpRequest.BodyPublishers.ofString("{\"max_queue_size\": 1000,\"cpu_time_limit\": 5,\"max_cpu_time_limit\": 25,\"cpu_extra_time\": 1,\"max_cpu_extra_time\": 2,\"wall_time_limit\": 10,\"max_wall_time_limit\": 30}"))
-				.header("X-RapidAPI-Key", "d40a7fbe3amsh0367fe75abf6c8cp156609jsna2f1bb034a2b")
-				.header("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com")
+				.header("Key", "Value")
+				.header("Host", "Cite")
 				.build();
 		HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 		return response.body();
@@ -39,8 +39,8 @@ public class judgeController {
 	public String getLanguage() throws IOException, InterruptedException {
 
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://13.233.54.34:2358/languages/91"))
-				.header("X-RapidAPI-Key", "d40a7fbe3amsh0367fe75abf6c8cp156609jsna2f1bb034a2b")
-				.header("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com")
+				.header("Key", "Value")
+				.header("Host", "Cite")
 				.method("GET", HttpRequest.BodyPublishers.noBody()).build();
 		HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 		return response.body();
