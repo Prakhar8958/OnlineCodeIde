@@ -16,41 +16,31 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 @Component
-public class mongoSearch implements MongoSearchRepo{
+public class mongoSearch implements MongoSearchRepo {
 
 	@Autowired
 	MongoClient client;
-	
+
 	@Autowired
 	MongoConverter converter;
-	
+
 	@Override
-	public List<mongoEntity> searchByText(String text) 
-	{
-	final List<mongoEntity> posts=new ArrayList<>();
-		
-	/*	
-	MongoClient mongoClient = new MongoClient(
-		    new MongoClientURI(
-		        "mongodb://localhost:27017/"
-		    )
-		);
-	*/
-		MongoDatabase database = client.getDatabase("employee");
-		MongoCollection<Document> collection = database.getCollection("emp");
+	public List<mongoEntity> searchByText(String text) {
+
+		final List<mongoEntity> posts = new ArrayList<>();
+
+		MongoDatabase database = client.getDatabase("demo"); // Ensure this matches your database name
+		MongoCollection<Document> collection = database.getCollection("demohelper");
+
 		AggregateIterable<Document> result = collection.aggregate(Arrays.asList(
-				/* this search option only allows in atlas
-				new Document("$search",
-				new Document("text",
-				new Document("query",text)
-				.append("path", Arrays.asList("desc","profile","skills")))),
-				*/
-				new Document("$sort", 
-		        new Document("exp", 1L)), 
-		        new Document("$limit", 5L)));
-		
-		result.forEach(doc->posts.add(converter.read(mongoEntity.class, doc)));
-		
+				new Document("$match", new Document("$or",
+						Arrays.asList(new Document("desc", new Document("$regex", text).append("$options", "i")),
+								new Document("profile", new Document("$regex", text).append("$options", "i")),
+								new Document("skills", new Document("$regex", text).append("$options", "i"))))),
+				new Document("$sort", new Document("experience", -1L)), new Document("$limit", 6L)));
+
+		result.forEach(doc -> posts.add(converter.read(mongoEntity.class, doc)));
+
 		return posts;
 	}
 
